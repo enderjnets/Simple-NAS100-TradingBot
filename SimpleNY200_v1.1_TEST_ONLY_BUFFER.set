@@ -1,0 +1,51 @@
+; SimpleNY200 v1.1 - TEST Configuration [ONLY HIGH BUFFER]
+; Para aislar el impacto del BreakoutBuffer alto
+; Created: 2024-12-12
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.1_TEST_ONLY_BUFFER
+LogLevel=1
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=3
+UseDST=false
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Opening Range ====
+OpeningRangeMinutes=10
+BreakoutBuffer=3.0
+RequireCloseOutside=false
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=false
+
+; ==== Gestión de Riesgo ====
+UseFixedLots=true
+FixedLotSize=0.1
+RiskPercent=1.0
+RiskRewardRatio=2.0
+MaxSpreadPips=5.0
+
+; ==== Límites Diarios ====
+MaxTradesPerDay=5
+TradeOnlyFirstSignal=false
+
+; ==== Trailing Stop (Opcional) ====
+UseTrailingStop=false
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

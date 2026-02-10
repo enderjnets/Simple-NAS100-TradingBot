@@ -1,0 +1,51 @@
+//+------------------------------------------------------------------+
+//| OnTick() - v1.4 PRE-MARKET ZONE STRATEGY                         |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // STEP 1: LICENSE RE-VERIFICATION (EVERY HOUR)
+    if(TimeCurrent() - ultimaVerificacion >= periodoVerificacion) {
+        if(!VerificarLicencia()) {
+            LogMessage("Re-verificación de licencia fallida", LOG_ERROR);
+            return;
+        }
+    }
+
+    // STEP 2: DAILY RESET CHECK
+    datetime currentTime = TimeCurrent();
+    MqlDateTime dt;
+    TimeToStruct(currentTime, dt);
+
+    static int lastDay = 0;
+
+    // Detectar cambio de día
+    if(dt.day != lastDay && lastDay != 0) {
+        ResetDailyData();
+        LogToFile("✅ Reset diario ejecutado - Día: " + IntegerToString(dt.day), LOG_INFO);
+    }
+    lastDay = dt.day;
+
+    // STEP 3: CALCULATE PRE-MARKET ZONE (8:15-8:30 AM)
+    CalculatePreMarketZone();
+
+    // STEP 4: CHECK DAILY TRADE LIMITS
+    if(g_TradesToday >= MaxTradesPerDay) {
+        g_State.canTrade = false;
+        return;
+    }
+
+    // STEP 5: CHECK IF ALREADY TRADED TODAY
+    if(g_TradedToday && TradeOnlyFirstSignal) {
+        return;
+    }
+
+    // STEP 6: MONITOR OPEN POSITION IF EXISTS
+    if(g_PositionOpen) {
+        MonitorOpenPosition();
+        return;
+    }
+
+    // STEP 7: CHECK FOR 2-CLOSE CONFIRMATION SIGNALS
+    // (Only active from 8:30 AM to 10:00 AM NY time)
+    CheckForTwoCloseSignals();
+}

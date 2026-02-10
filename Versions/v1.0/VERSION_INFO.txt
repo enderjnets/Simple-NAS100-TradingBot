@@ -1,0 +1,156 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║                   SimpleNY200 v1.0 - VERSION INFO                     ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+Version:        1.0
+Release Date:   2024-12-10
+Compiled:       2024-12-10 18:33
+Status:         ⛔ DEPRECATED - BUG CRÍTICO DETECTADO
+Reemplazada por: v1.1 (2024-12-12)
+
+═══════════════════════════════════════════════════════════════════════
+
+ARCHIVOS INCLUIDOS:
+-------------------
+✅ SimpleNY200_v1.0.mq5            (63 KB) - Código fuente
+✅ SimpleNY200_v1.0.ex5            (61 KB) - Ejecutable compilado
+✅ SimpleNY200_Default.set         (1.0 KB) - Config balanceada
+✅ SimpleNY200_NASDAQ.set          (1.3 KB) - Config US100 optimizada
+✅ SimpleNY200_SP500.set           (1.2 KB) - Config US500 optimizada
+
+═══════════════════════════════════════════════════════════════════════
+
+CONFIGURACIÓN PARA CUENTA DE $100,000:
+---------------------------------------
+
+NASDAQ (US100):
+- Lote: 1.0
+- Opening Range: 10 minutos
+- Breakout Buffer: 3.0 pips
+- Risk:Reward: 1:2.0
+- Trailing Stop: ACTIVADO (30/15 pips)
+- Riesgo/Trade: ~$200-400 (0.2-0.4%)
+
+SP500 (US500):
+- Lote: 1.5
+- Opening Range: 15 minutos
+- Breakout Buffer: 1.5 pips
+- Risk:Reward: 1:1.5
+- Trailing Stop: DESACTIVADO
+- Riesgo/Trade: ~$300-500 (0.3-0.5%)
+
+DEFAULT (Genérico):
+- Lote: 1.0
+- Opening Range: 15 minutos
+- Breakout Buffer: 2.0 pips
+- Risk:Reward: 1:1.5
+- Trailing Stop: DESACTIVADO
+- Riesgo/Trade: ~$200-400 (0.2-0.4%)
+
+═══════════════════════════════════════════════════════════════════════
+
+CARACTERÍSTICAS PRINCIPALES:
+-----------------------------
+✅ Estrategia NY Opening Range Breakout
+✅ Filtro de tendencia SMA 200
+✅ Sistema de licencias Bittrader (48h grace period)
+✅ Stop Loss en extremo opuesto del rango
+✅ Take Profit con R:R configurable
+✅ Trailing stop opcional
+✅ Logging detallado a archivo
+✅ Estadísticas de rendimiento (win rate, profit factor)
+✅ Máximo 1 trade por día
+✅ Validación de spread máximo
+
+═══════════════════════════════════════════════════════════════════════
+
+ESPECIFICACIONES TÉCNICAS:
+---------------------------
+- Líneas de código: ~1650
+- Tamaño compilado: 61 KB
+- Magic Number: 200200200
+- Compilación: 0 errores, 0 warnings
+- Tiempo de compilación: 948 ms
+- Platform: MetaTrader 5
+- Lenguaje: MQL5
+
+═══════════════════════════════════════════════════════════════════════
+
+INSTALACIÓN EN MT5:
+--------------------
+1. Copiar archivos a:
+   - .ex5 → MQL5/Experts/Advisors/SimpleNY200/
+   - .set → MQL5/Profiles/Tester/SimpleNY200/
+
+2. Reiniciar MT5
+
+3. Para backtest:
+   - Strategy Tester → SimpleNY200 v1.0
+   - Deposit: 100000
+   - Symbol: US100 o US500
+   - Period: M1
+   - Cargar .set apropiado
+
+═══════════════════════════════════════════════════════════════════════
+
+NOTAS IMPORTANTES:
+------------------
+⚠️ Timeframe obligatorio: M1
+⚠️ Configurar BrokerGMTOffset correctamente
+⚠️ Licencia se omite automáticamente en backtest
+⚠️ Empezar con lotes mínimos en cuenta real
+
+═══════════════════════════════════════════════════════════════════════
+
+CAMBIOS DESDE ÚLTIMA VERSIÓN:
+------------------------------
+N/A - Primera release
+
+═══════════════════════════════════════════════════════════════════════
+
+⛔ BUG CRÍTICO DETECTADO (2024-12-12):
+---------------------------------------
+PROBLEMA: Detección incorrecta de sesión NY cuando cruza medianoche
+
+SÍNTOMA:
+- Solo 2 trades en 1 mes de backtest (esperado: ~20 trades)
+- Trades ejecutados FUERA del horario de Nueva York
+- Rango de apertura nunca se calculaba correctamente
+
+CAUSA:
+- La función GetNYOpenTime() calculaba el horario de apertura
+  siempre para el día actual sin considerar que la sesión cruza
+  medianoche (ej: 17:30 día 1 → 01:30 día 2)
+- En horas tempranas (00:00-17:30) debería usar el nyOpen del
+  día ANTERIOR pero usaba el del día actual (futuro)
+
+SOLUCIÓN:
+- Versión v1.1 corrige completamente este bug
+- Ver CHANGELOG.md para detalles completos
+
+⚠️ NO USAR ESTA VERSIÓN - ACTUALIZAR A v1.1
+
+═══════════════════════════════════════════════════════════════════════
+
+PRÓXIMAS VERSIONES:
+-------------------
+✅ v1.1 (Lanzada 2024-12-12):
+- [HOTFIX] Corrección bug detección sesión NY
+- Logs de diagnóstico extensivos
+- Manejo correcto de midnight crossover
+
+v1.2 (Futura):
+- Panel visual completo
+- Multi-symbol support
+- Alertas Telegram/Email
+- Auto-detección GMT offset
+
+═══════════════════════════════════════════════════════════════════════
+
+DESARROLLADOR:
+--------------
+Bittrader Development Team
+YouTube: @bittrader9259
+Fecha: 2024-12-10
+
+═══════════════════════════════════════════════════════════════════════

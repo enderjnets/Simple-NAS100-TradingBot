@@ -1,0 +1,138 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f0\fs24 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Basado en el an\'e1lisis detallado del video transcrito, aqu\'ed tienes la **Estrategia "Simplicidad de Nueva York"** desglosada paso a paso para que puedas programarla o configurarla en MetaTrader 5 (MT5).\
+\
+El autor enfatiza eliminar la complejidad (Smart Money Concepts, bloques de \'f3rdenes, liquidez excesiva) y centrarse en **Direcci\'f3n + Ejecuci\'f3n en la Apertura.**\
+\
+---\
+\
+### 1. Ficha T\'e9cnica de la Estrategia\
+\
+*   **Activo sugerido:** \'cdndices Americanos (principalmente **NASDAQ 100** o US100, tambi\'e9n SP500).\
+*   **Temporalidad (Timeframe):** 1 Minuto (**M1**).\
+*   **Horario de Operaci\'f3n:** Apertura de la sesi\'f3n de Nueva York (New York Open). Aqu\'ed es donde entra el volumen transaccional.\
+    *   *Nota:* Generalmente esto es a las 9:30 AM EST (Hora de Nueva York).\
+\
+### 2. Indicadores y Configuraci\'f3n\
+\
+Solo se requiere un indicador t\'e9cnico para determinar el sesgo direccional:\
+*   **Media M\'f3vil (Moving Average):**\
+    *   Periodo: **200**\
+    *   M\'e9todo: **Simple** (SMA) o Exponencial (EMA) - *En el video parece una SMA est\'e1ndar.*\
+    *   Aplicar a: **Cierre** (Close).\
+\
+---\
+\
+### 3. L\'f3gica de la Estrategia (Algoritmo)\
+\
+Para automatizar esto en MT5, el robot debe seguir esta secuencia l\'f3gica en cada tick o cierre de vela:\
+\
+#### A. Filtro de Tendencia (Direcci\'f3n)\
+El bot debe verificar la posici\'f3n del precio actual respecto a la SMA 200.\
+*   **Escenario COMPRAS (Long):** El precio est\'e1 **por encima** de la SMA 200. (Se ignoran todas las se\'f1ales de venta).\
+*   **Escenario VENTAS (Short):** El precio est\'e1 **por debajo** de la SMA 200. (Se ignoran todas las se\'f1ales de compra).\
+\
+#### B. Definici\'f3n del Rango de Apertura (La Zona)\
+El video muestra marcar el "Alto" y el "Bajo" de la sesi\'f3n. Para automatizar esto, necesitas definir un periodo de tiempo inicial (Opening Range).\
+*   **Variable:** `Tiempo_Calculo_Rango` (Ej. los primeros 5, 15 o 30 minutos de la sesi\'f3n).\
+*   El bot debe registrar el **Precio M\'e1ximo (High)** y el **Precio M\'ednimo (Low)** formados durante ese lapso de tiempo inicial en la apertura de Nueva York.\
+\
+#### C. Gatillo de Entrada (Ejecuci\'f3n)\
+Una vez definido el Alto y Bajo del rango inicial:\
+\
+1.  **Entrada en LARGO (Buy):**\
+    *   Condici\'f3n 1: Precio > SMA 200.\
+    *   Condici\'f3n 2: Una vela cierra **por encima** del Precio M\'e1ximo del rango definido.\
+    *   *Acci\'f3n:* Abrir orden de compra al cierre de la vela de ruptura (Breakout).\
+\
+2.  **Entrada en CORTO (Sell):**\
+    *   Condici\'f3n 1: Precio < SMA 200.\
+    *   Condici\'f3n 2: Una vela cierra **por debajo** del Precio M\'ednimo del rango definido.\
+    *   *Acci\'f3n:* Abrir orden de venta al cierre de la vela de ruptura.\
+\
+---\
+\
+### 4. Gesti\'f3n de Riesgo (Money Management)\
+\
+El video es espec\'edfico en el ratio, pero algo subjetivo en la colocaci\'f3n del Stop Loss (habla de "\'faltimos bajos"). Para un bot, debemos estandarizarlo:\
+\
+*   **Stop Loss (SL):**\
+    *   *Opci\'f3n A (Video estricto):* En el \'faltimo "swing high" o "swing low" dentro del rango antes de la ruptura. (Requiere programar una funci\'f3n que detecte el fractal anterior).\
+    *   *Opci\'f3n B (M\'e1s f\'e1cil de automatizar):* Poner el SL en el extremo opuesto del rango de apertura, o en el punto medio del rango si este es muy amplio.\
+*   **Take Profit (TP):**\
+    *   Ratio Riesgo:Beneficio de **1:1** o **1:1.5**.\
+    *   *C\'e1lculo:* Si el SL est\'e1 a 20 puntos de distancia, el TP se coloca a 20 o 30 puntos.\
+\
+---\
+\
+### 5. Gu\'eda de Implementaci\'f3n para MT5 (MQL5)\
+\
+Si vas a programar esto o pedirle a un desarrollador que lo haga, esta es la estructura l\'f3gica que debe tener el Expert Advisor (EA):\
+\
+#### Inputs (Par\'e1metros editables):\
+```cpp\
+input int      MagicNumber = 123456;      // ID del EA\
+input double   LotSize = 1.0;             // Volumen fijo\
+input int      MA_Period = 200;           // Periodo Media M\'f3vil\
+input int      NY_Open_Hour = 16;         // Hora servidor apertura NY (Ajustar seg\'fan broker)\
+input int      NY_Open_Minute = 30;       // Minuto apertura\
+input int      Range_Duration_Min = 15;   // Duraci\'f3n para calcular alto/bajo inicial\
+input double   RiskReward = 1.5;          // Ratio de Ganancia\
+```\
+\
+#### Variables Globales:\
+*   `RangeHigh`: Variable para guardar el precio m\'e1ximo del rango.\
+*   `RangeLow`: Variable para guardar el precio m\'ednimo.\
+*   `RangeCalculated`: Booleano (True/False) para saber si ya pas\'f3 el tiempo de c\'e1lculo.\
+*   `TradeTaken`: Booleano para limitar a 1 operaci\'f3n por d\'eda (opcional pero recomendado).\
+\
+#### L\'f3gica en `OnTick()`:\
+\
+1.  **Chequeo de Hora:**\
+    *   Si la hora actual es anterior a `NY_Open_Hour`, no hacer nada.\
+    *   Si es una nueva sesi\'f3n, resetear las variables `RangeHigh`, `RangeLow`, y `TradeTaken`.\
+\
+2.  **C\'e1lculo del Rango (Fase 1):**\
+    *   Desde la hora de apertura hasta (`Hora Apertura` + `Range_Duration_Min`), el bot solo observa.\
+    *   Usa `iHigh` y `iLow` para actualizar constantemente el m\'e1ximo y m\'ednimo de ese periodo.\
+    *   Al finalizar el tiempo (ej. 9:45 AM), fijar los valores finales de `RangeHigh` y `RangeLow`.\
+\
+3.  **Detecci\'f3n de Ruptura (Fase 2):**\
+    *   Obtener valor de la SMA 200 actual (`iMA`).\
+    *   Obtener precio de cierre de la vela 1 (la reci\'e9n cerrada).\
+    *   **L\'f3gica de Compra:**\
+        ```cpp\
+        if (Close[1] > RangeHigh && Close[1] > SMA_Value && !TradeTaken)\
+        \{\
+             // Calcular SL en el \'faltimo bajo (o RangeLow)\
+             // Calcular TP = (PrecioEntrada - SL) * RiskReward\
+             // Enviar OrderSend(OP_BUY...)\
+             TradeTaken = true;\
+        \}\
+        ```\
+    *   **L\'f3gica de Venta:**\
+        ```cpp\
+        if (Close[1] < RangeLow && Close[1] < SMA_Value && !TradeTaken)\
+        \{\
+             // Calcular SL en el \'faltimo alto (o RangeHigh)\
+             // Calcular TP = (SL - PrecioEntrada) * RiskReward\
+             // Enviar OrderSend(OP_SELL...)\
+             TradeTaken = true;\
+        \}\
+        ```\
+\
+### Consideraciones Importantes para la Automatizaci\'f3n\
+\
+1.  **El "Whipsaw" (Falsas Rupturas):** En temporalidad de 1 minuto, el precio puede cerrar fuera del rango y devolverse inmediatamente. El video menciona esperar el cierre de la vela, lo cual es correcto, pero considera agregar un **buffer** (ej. que rompa por al menos 1 o 2 pips/puntos) para evitar ruido.\
+2.  **Definici\'f3n de "\'daltimo Bajo/Alto":** El video dice "pon el stop loss en el bajo anterior". Automatizar "el bajo anterior" es complejo porque es subjetivo. Para el c\'f3digo inicial, te recomiendo usar el **m\'ednimo de las \'faltimas X velas** (ej. \'faltimas 5 velas) o el **Bajo del Rango de Apertura** como Stop Loss inicial para simplificar.\
+3.  **Hora del Servidor:** Debes saber exactamente qu\'e9 hora tiene tu broker en MT5 en relaci\'f3n con Nueva York. Si tu broker es GMT+2 o GMT+3, la apertura de las 9:30 AM EST ser\'e1 diferente en el reloj de MT5.\
+\
+\
+}

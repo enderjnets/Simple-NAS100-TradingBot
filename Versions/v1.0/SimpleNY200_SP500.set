@@ -1,0 +1,57 @@
+; SimpleNY200 v1.0 - S&P 500 Optimized Configuration
+; Optimized for US500 (S&P 500 index)
+; Created: 2025-12-10
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.0_SP500
+LogLevel=1
+MagicNumber=200200200
+
+; ==== Configuraci贸n Sesi贸n Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuraci贸n Opening Range ====
+; S&P 500 es m谩s estable - rango m谩s largo
+OpeningRangeMinutes=15
+; Buffer menor por menor volatilidad
+BreakoutBuffer=1.5
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=true
+
+; ==== Gesti贸n de Riesgo ====
+UseFixedLots=true
+; Optimizado para cuenta de $100,000 - S&P 500 es menos vol谩til
+FixedLotSize=1.5
+RiskPercent=1.0
+; Risk:Reward conservador
+RiskRewardRatio=1.5
+; S&P 500 tiene spreads m谩s bajos
+MaxSpreadPips=2.0
+
+; ==== L铆mites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; S&P 500 funciona mejor con TP fijo
+UseTrailingStop=false
+TrailingStartPips=20.0
+TrailingStopPips=10.0
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

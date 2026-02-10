@@ -1,0 +1,75 @@
+; SimpleNY200 v1.6 - NASDAQ 100 Pre-Market Zone Strategy
+; Optimized for US100 - 8:15/8:30 AM Zone with 3-Close Confirmation + SMA Filter
+; Created: 2026-01-13 | Updated: 2026-01-14 (v1.6 Fix)
+; Version: 1.6 - SMA Filter Fix (Correctly implements trend filter)
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.6_NASDAQ
+LogLevel=2
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Pre-Market Zone (v1.4) ====
+; La zona se calcula entre 8:15 AM y 8:30 AM
+; 8:15 AM → Body HIGH
+; 8:30 AM → Body LOW
+; Señales buscadas hasta 10:00 AM
+ZoneStartHour=8
+ZoneStartMinute=15
+ZoneEndMinute=30
+SignalSearchEndHour=10
+SignalSearchEndMinute=0
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+; ✅ MEJORA #1: Activado para filtrar trades contra-tendencia
+UseSMAFilter=true
+
+; ==== Gestión de Riesgo ====
+; Usar lotaje dinámico con riesgo moderado
+UseFixedLots=false
+FixedLotSize=1.0
+RiskPercent=1.0
+; Risk:Reward por defecto 1:2 (CONFIGURABLE por usuario)
+RiskRewardRatio=2.0
+MaxSpreadPips=5.0
+
+; ==== Gestión de Riesgo Avanzada (v1.3) ====
+CapitalSource=4
+CurrencyPairAppendix=
+; ✅ FIX Bug #6: Reducido de 50.0 a 10.0 para seguridad adicional
+AllowedMaxLotSize=10.0
+
+; ==== Límites Diarios ====
+; Solo 1 trade por día (primera señal confirmada)
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; Desactivado para v1.4 (TP fijo con R:R 1:2)
+UseTrailingStop=false
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Stop Loss Dinámico con ATR (v1.3) ====
+; Desactivado - usar zona como SL
+UseATRStopLoss=false
+ATRPeriod=14
+ATRMultiplier=1.5
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

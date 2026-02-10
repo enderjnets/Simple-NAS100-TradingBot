@@ -1,0 +1,57 @@
+; SimpleNY200 v1.0 - NASDAQ 100 Optimized Configuration
+; Optimized for US100 (NASDAQ 100 index)
+; Created: 2025-12-10
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.0_NASDAQ
+LogLevel=1
+MagicNumber=200200200
+
+; ==== Configuraci贸n Sesi贸n Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuraci贸n Opening Range ====
+; NASDAQ tiene mayor volatilidad - rango m谩s corto
+OpeningRangeMinutes=10
+; NASDAQ necesita m谩s buffer por mayor volatilidad
+BreakoutBuffer=3.0
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=true
+
+; ==== Gesti贸n de Riesgo ====
+UseFixedLots=true
+; Optimizado para cuenta de $100,000
+FixedLotSize=1.0
+RiskPercent=1.0
+; Risk:Reward m谩s agresivo para aprovechar movimientos
+RiskRewardRatio=2.0
+; NASDAQ puede tener spreads m谩s altos
+MaxSpreadPips=5.0
+
+; ==== L铆mites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; NASDAQ se beneficia de trailing stop
+UseTrailingStop=true
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

@@ -1,0 +1,73 @@
+; SimpleNY200 v1.3 - NASDAQ 100 Conservative Configuration
+; Optimized for US100 - TESTING & CONSERVATIVE APPROACH
+; Created: 2025-01-12
+; Version: 1.3 - Configuración conservadora para primeros tests
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.3_NASDAQ_CONSERVATIVE
+LogLevel=2
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Opening Range ====
+; Rango más largo para reducir señales falsas
+OpeningRangeMinutes=15
+; Buffer conservador
+BreakoutBuffer=2.0
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+; ACTIVAR filtro SMA para mayor seguridad
+UseSMAFilter=true
+
+; ==== Gestión de Riesgo ====
+; CONSERVADOR: Usar lotaje dinámico con riesgo bajo
+UseFixedLots=false
+FixedLotSize=1.0
+; Riesgo MUY conservador: 0.5%
+RiskPercent=0.5
+; Risk:Reward conservador pero viable
+RiskRewardRatio=1.5
+MaxSpreadPips=5.0
+
+; ==== Gestión de Riesgo Avanzada (v1.3) ====
+; Usar Balance (más conservador que Equity)
+CapitalSource=4
+CurrencyPairAppendix=
+; Límite conservador de lotaje
+AllowedMaxLotSize=20.0
+
+; ==== Límites Diarios ====
+; Solo 1 trade por día para empezar
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; Desactivado para empezar - tomar TP fijo
+UseTrailingStop=false
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Stop Loss Dinámico con ATR (v1.3) ====
+; Desactivado - usar Opening Range (más predecible)
+UseATRStopLoss=false
+ATRPeriod=14
+ATRMultiplier=1.5
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

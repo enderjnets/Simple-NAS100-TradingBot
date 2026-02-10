@@ -1,0 +1,168 @@
+## v1.4 (2026-01-13)
+
+**🔄 MAJOR STRATEGY CHANGE - Pre-Market Zone 8:15/8:30 AM**
+
+### 🎯 Nueva Estrategia
+
+**CAMBIO FUNDAMENTAL:** La estrategia cambia completamente de "Opening Range 9:30 AM" a "Pre-Market Zone 8:15-8:30 AM".
+
+#### Estrategia Anterior (v1.3):
+- ✗ Opening Range: 9:30-9:45 AM (15 minutos)
+- ✗ Esperar breakout del rango
+- ✗ Filtro SMA 200 opcional
+
+#### Nueva Estrategia (v1.4):
+- ✓ **Zona Pre-Market:** 8:15 AM - 8:30 AM
+- ✓ **Marcadores:**
+  - 8:15 AM → Body HIGH (MAX(open, close))
+  - 8:30 AM → Body LOW (MIN(open, close))
+- ✓ **Señal de Confirmación:** 2 cierres (consecutivos o no) fuera de la zona
+  - COMPRA: 2 cierres por ENCIMA del HIGH de 8:15
+  - VENTA: 2 cierres por DEBAJO del LOW de 8:30
+- ✓ **Ventana de Trading:** 8:30 AM - 10:00 AM (solo 90 minutos)
+- ✓ **Risk:Reward:** FIJO 1:2 (no configurable)
+  - SL = Nivel de la zona
+  - TP = 2x el tamaño de la zona
+
+### ✨ Nuevas Características
+
+#### 1. **Detección Precisa de Horario NY**
+```mql5
+bool IsSpecificNYTimeCandle(int targetHour, int targetMinute)
+// Detecta exactamente la vela de 8:15 AM o 8:30 AM
+// Maneja conversión GMT → NY time con DST
+```
+
+#### 2. **Cálculo Inteligente de Zona**
+```mql5
+void CalculatePreMarketZone()
+// Captura body HIGH de 8:15 AM
+// Captura body LOW de 8:30 AM
+// Maneja escenario de GAP (invierte zona si LOW > HIGH)
+```
+
+#### 3. **Contador de Cierres No Consecutivos**
+```mql5
+void CheckForTwoCloseSignals()
+// Cuenta cierres por encima/debajo de zona
+// Puede haber velas intermedias que no cumplen
+// Ejecuta trade al detectar 2do cierre
+```
+
+#### 4. **Ventana de Trading Limitada**
+```mql5
+bool IsWithinSignalSearchPeriod()
+// Solo busca señales entre 8:30 AM - 10:00 AM
+// Después de 10:00 AM no opera más ese día
+```
+
+### 🛠️ Cambios Técnicos
+
+#### Nuevas Variables Globales:
+```mql5
+datetime  g_Zone815Time        // Time de vela 8:15
+datetime  g_Zone830Time        // Time de vela 8:30
+double    g_Zone815High        // Body HIGH de 8:15
+double    g_Zone830Low         // Body LOW de 8:30
+double    g_ZoneUpperLevel     // Límite superior zona
+double    g_ZoneLowerLevel     // Límite inferior zona
+bool      g_ZoneInverted       // Si zona fue invertida (GAP)
+int       g_ClosesAboveZone    // Contador cierres arriba
+int       g_ClosesBelowZone    // Contador cierres abajo
+```
+
+#### Funciones Eliminadas (Obsoletas):
+- ~~`CalculateOpeningRange()`~~ → Reemplazado por `CalculatePreMarketZone()`
+- ~~`CheckBullishBreakout()`~~ → Reemplazado por `CheckForTwoCloseSignals()`
+- ~~`CheckBearishBreakout()`~~ → Reemplazado por `CheckForTwoCloseSignals()`
+- ~~`IsWithinOpeningRange()`~~ → Ya no se necesita
+
+#### OnTick() Simplificado:
+El nuevo OnTick() es mucho más simple (solo 7 pasos vs 13 anteriores):
+1. Verificación de licencia
+2. Reset diario
+3. Calcular zona pre-market
+4. Verificar límites diarios
+5. Verificar si ya operó
+6. Monitorear posición abierta
+7. Buscar señales de 2 cierres
+
+### ⚠️ Breaking Changes
+
+1. **Risk:Reward FIJO en 1:2** - No se puede cambiar
+2. **NO hay Opening Range** - Estrategia completamente diferente
+3. **Input parámetros obsoletos:**
+   - ~~`OpeningRangeMinutes`~~ → Ya no se usa
+   - ~~`BreakoutBuffer`~~ → Ya no se usa
+   - ~~`RequireCloseOutside`~~ → Ya no se usa
+
+### 📊 Ventajas de v1.4 vs v1.3
+
+| Aspecto | v1.3 (Opening Range) | v1.4 (Pre-Market Zone) |
+|---------|---------------------|------------------------|
+| **Horario** | 9:30-9:45 AM | 8:15-8:30 AM |
+| **Confirmación** | Breakout inmediato | 2 cierres fuera de zona |
+| **Ventana Trading** | Todo el día (hasta 4 PM) | Solo hasta 10:00 AM |
+| **Risk:Reward** | Configurable (1, 1.5, 2) | FIJO 1:2 |
+| **Stop Loss** | Range Low/High + buffer | Nivel exacto de zona |
+| **Falsos Breakouts** | Alta incidencia | Reducidos (req. 2 cierres) |
+
+### 🎓 Filosofía de la Nueva Estrategia
+
+**¿Por qué 8:15-8:30 AM?**
+- Pre-market (antes de la apertura oficial de 9:30 AM)
+- Detecta intención institucional temprana
+- Menor ruido que durante el Opening Range
+
+**¿Por qué 2 cierres?**
+- Confirmación de dirección
+- Reduce señales falsas
+- Permite filtrar movimientos erráticos
+
+**¿Por qué solo hasta 10:00 AM?**
+- Primeros 30 min después de apertura (9:30-10:00) son más volátiles
+- Después de 10:00 AM el momentum suele perderse
+- Evita operar en condiciones de bajo volumen
+
+### 📦 Archivos Nuevos
+
+- `SimpleNY200_v1.4.mq5` - Expert Advisor con nueva estrategia
+- `SimpleNY200_v1.4_NASDAQ.set` - Configuración optimizada para NAS100
+
+### 🔄 Migración desde v1.3
+
+**NO es compatible con v1.3.** Es una estrategia completamente diferente.
+
+Si vienes de v1.3:
+1. Copia `SimpleNY200_v1.4.mq5` a tu carpeta de Experts
+2. Compila el EA
+3. Usa el archivo `SimpleNY200_v1.4_NASDAQ.set`
+4. Ejecuta backtest para familiarizarte con la nueva lógica
+
+### 📈 Testing Recomendado
+
+```
+Symbol: US100
+Timeframe: M1
+Period: 2025.01.01 - 2026.01.11
+Deposit: $100,000
+Model: Every tick based on real ticks
+.set file: SimpleNY200_v1.4_NASDAQ.set
+```
+
+**Resultados esperados:**
+- Menos trades que v1.3 (zona más selectiva)
+- Mayor win rate (confirmación de 2 cierres)
+- R:R constante 1:2
+- Operar solo hasta 10:00 AM
+
+### 🐛 Bugs Corregidos de v1.3
+
+Mantiene todas las correcciones de v1.3:
+- ✓ Lotaje entero para NAS100
+- ✓ Validación dual de margen
+- ✓ Conversión precisa de ticks
+- ✓ Soporte multi-moneda
+
+---
+

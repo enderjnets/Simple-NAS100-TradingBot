@@ -1,0 +1,52 @@
+; SimpleNY200 v1.0 - Default Configuration
+; New York Opening Range Breakout Strategy with SMA 200 Filter
+; Created: 2025-12-10
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.0
+LogLevel=1
+MagicNumber=200200200
+
+; ==== Configuraci贸n Sesi贸n Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuraci贸n Opening Range ====
+OpeningRangeMinutes=15
+BreakoutBuffer=2.0
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=true
+
+; ==== Gesti贸n de Riesgo ====
+UseFixedLots=true
+; Optimizado para cuenta de $100,000
+FixedLotSize=1.0
+RiskPercent=1.0
+RiskRewardRatio=1.5
+MaxSpreadPips=3.0
+
+; ==== L铆mites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+UseTrailingStop=false
+TrailingStartPips=20.0
+TrailingStopPips=10.0
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

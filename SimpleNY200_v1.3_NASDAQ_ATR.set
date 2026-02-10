@@ -1,0 +1,69 @@
+; SimpleNY200 v1.3 - NASDAQ 100 with ATR Stop Loss
+; Optimized for US100 (NASDAQ 100 index) with DYNAMIC ATR-BASED SL
+; Created: 2025-01-12
+; Version: 1.3 - ATR Stop Loss para volatilidad adaptativa
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.3_NASDAQ_ATR
+LogLevel=2
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Opening Range ====
+; Con ATR, el Opening Range solo se usa para detección de breakout
+OpeningRangeMinutes=10
+BreakoutBuffer=3.0
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=true
+
+; ==== Gestión de Riesgo ====
+; v1.3: Usar lotaje dinámico con ATR para mejor adaptación
+UseFixedLots=false
+FixedLotSize=1.0
+RiskPercent=1.0
+; Risk:Reward más conservador con ATR (SL es variable)
+RiskRewardRatio=1.5
+MaxSpreadPips=5.0
+
+; ==== Gestión de Riesgo Avanzada (v1.3) ====
+CapitalSource=4
+CurrencyPairAppendix=
+AllowedMaxLotSize=50.0
+
+; ==== Límites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; Con ATR SL, trailing stop más agresivo
+UseTrailingStop=true
+TrailingStartPips=25.0
+TrailingStopPips=12.0
+
+; ==== Stop Loss Dinámico con ATR (v1.3) ====
+; ACTIVADO - SL se adapta a volatilidad del mercado
+UseATRStopLoss=true
+; ATR 14 período estándar
+ATRPeriod=14
+; Multiplicador 1.2 para NASDAQ (ajustado por alta volatilidad)
+ATRMultiplier=1.2
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

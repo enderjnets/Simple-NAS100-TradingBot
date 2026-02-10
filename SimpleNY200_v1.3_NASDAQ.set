@@ -1,0 +1,73 @@
+; SimpleNY200 v1.3 - NASDAQ 100 Optimized Configuration
+; Optimized for US100 (NASDAQ 100 index) with ADVANCED RISK MANAGEMENT
+; Created: 2025-01-12
+; Version: 1.3 - Includes new advanced risk management parameters
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.3_NASDAQ
+LogLevel=2
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Opening Range ====
+; NASDAQ tiene mayor volatilidad - rango más corto
+OpeningRangeMinutes=10
+; NASDAQ necesita más buffer por mayor volatilidad
+BreakoutBuffer=3.0
+RequireCloseOutside=true
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+UseSMAFilter=true
+
+; ==== Gestión de Riesgo ====
+; v1.3: Usar lotaje dinámico en lugar de fijo para NAS100
+UseFixedLots=false
+FixedLotSize=1.0
+; Riesgo conservador para empezar
+RiskPercent=1.0
+; Risk:Reward agresivo para aprovechar movimientos de NASDAQ
+RiskRewardRatio=2.0
+; NASDAQ puede tener spreads más altos
+MaxSpreadPips=5.0
+
+; ==== Gestión de Riesgo Avanzada (v1.3) ====
+; Usar Balance de cuenta para cálculos (4=BALANCE, 2=FREEMARGIN, 8=EQUITY)
+CapitalSource=4
+; Sin sufijo de broker (dejar vacío si no aplica)
+CurrencyPairAppendix=
+; Límite máximo de lotaje para protección
+AllowedMaxLotSize=50.0
+
+; ==== Límites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+; NASDAQ se beneficia de trailing stop
+UseTrailingStop=true
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Stop Loss Dinámico con ATR (v1.3) ====
+; Desactivado por defecto - usar Opening Range primero
+UseATRStopLoss=false
+ATRPeriod=14
+ATRMultiplier=1.5
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true

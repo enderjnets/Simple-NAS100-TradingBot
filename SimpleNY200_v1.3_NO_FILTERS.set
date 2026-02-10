@@ -1,0 +1,67 @@
+; SimpleNY200 v1.3 - SIN FILTROS (Testing)
+; Configuración para testing sin filtros - para verificar funcionamiento básico
+; Created: 2026-01-12
+; ADVERTENCIA: Esta configuración genera MUCHOS trades (buenos y malos)
+; Solo para TESTING - NO usar en cuenta real
+
+; ==== Sistema de Licencias ====
+LicenseKey=
+
+; ==== Ajustes Generales del EA ====
+EAIdentifier=SimpleNY200_v1.3_NO_FILTERS
+LogLevel=2
+MagicNumber=200200200
+
+; ==== Configuración Sesión Nueva York ====
+BrokerGMTOffset=0
+UseDST=true
+NYOpenHour=9
+NYOpenMinute=30
+
+; ==== Configuración Opening Range ====
+OpeningRangeMinutes=15
+BreakoutBuffer=2.0
+; SIN FILTRO: No requiere cierre fuera del rango
+RequireCloseOutside=false
+
+; ==== Filtro de Tendencia SMA ====
+SMAPeriod=200
+; SIN FILTRO: Desactivar SMA
+UseSMAFilter=false
+
+; ==== Gestión de Riesgo ====
+; Usar configuración CONSERVATIVE
+UseFixedLots=false
+FixedLotSize=1.0
+RiskPercent=0.5
+RiskRewardRatio=1.5
+; Spread alto para no rechazar trades
+MaxSpreadPips=50.0
+
+; ==== Gestión de Riesgo Avanzada (v1.3) ====
+CapitalSource=4
+CurrencyPairAppendix=
+AllowedMaxLotSize=20.0
+
+; ==== Límites Diarios ====
+MaxTradesPerDay=1
+TradeOnlyFirstSignal=true
+
+; ==== Trailing Stop (Opcional) ====
+UseTrailingStop=false
+TrailingStartPips=30.0
+TrailingStopPips=15.0
+
+; ==== Stop Loss Dinámico con ATR (v1.3) ====
+UseATRStopLoss=false
+ATRPeriod=14
+ATRMultiplier=1.5
+
+; ==== Panel Visual ====
+ShowPanel=true
+PanelXPosition=20
+PanelYPosition=30
+
+; ==== Sistema de Logging ====
+EnableFileLogging=true
+EnableStatistics=true
